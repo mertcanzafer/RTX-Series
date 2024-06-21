@@ -8,27 +8,35 @@ public:
 
 	struct xyz
 	{
-		double x;
-		double y;
-		double z;
+		float x;
+		float y;
+		float z;
 	};
 
 	xyz v;
 
-	vec3():v{0.0,0.0,0.0}{}
+	vec3():v{0.0f,0.0f,0.0f}{}
 
-	vec3(double x,double y,double z):
+	vec3(float x,float y,float z):
 		v{x,y,z}{}
 
-	double x()const noexcept{ return v.x; }
-	double y()const noexcept { return v.y; }
-	double z()const noexcept { return v.z; }
+	vec3(const vec3& copy)
+		:v{copy.v}{}
+
+	vec3& operator=(const vec3& copy)
+	{
+		v = copy.v;
+	}
+
+	float x()const noexcept{ return v.x; }
+	float y()const noexcept { return v.y; }
+	float z()const noexcept { return v.z; }
 
 	// Operator overloading
 
 	vec3 operator-()const { return vec3(-v.x, -v.y, -v.z); }
 
-	double operator[](int i)const{
+	float operator[](int i)const{
 		switch (i)
 		{
 		case 0:
@@ -43,7 +51,7 @@ public:
 		}
 	}
 
-	double& operator[](int i)
+	float& operator[](int i)
 	{
 		switch (i)
 		{
@@ -68,7 +76,7 @@ public:
 		return *this;
 	}
 
-	vec3& operator *=(double k)
+	vec3& operator *=(float k)
 	{
 		//scalar multiplication
 		v.x *= k;
@@ -77,7 +85,7 @@ public:
 		return *this;
 	}
 
-	vec3& operator/=(double k)
+	vec3& operator/=(float k)
 	{
 		if (k != 0.0)
 		{
@@ -88,12 +96,12 @@ public:
 		}
 	}
 
-	double length_squared()const
+	float length_squared()const
 	{
 		return (v.x * v.x + v.y * v.y * v.z * v.z);
 	}
 
-	double length()const
+	float length()const
 	{
 		return (std::sqrt(length_squared()));
 	}
@@ -128,17 +136,17 @@ inline vec3 operator*(const vec3& v1, const vec3& v2)
 	return vec3(v1.v.x * v2.v.x, v1.v.y * v2.v.y, v1.v.z * v2.v.z);
 }
 
-inline vec3 operator*(double k, const vec3& v)
+inline vec3 operator*(float k, const vec3& v)
 {
 	return vec3(v.v.x * k, v.v.y * k , v.v.z * k);
 }
 
-inline vec3 operator*(const vec3& v,double k)
+inline vec3 operator*(const vec3& v,float k)
 {
 	return k * v;
 }
 
-inline vec3 operator/(const vec3& v, double k)
+inline vec3 operator/(const vec3& v, float k)
 {
 	if (k != 0.0)
 	{
@@ -149,7 +157,7 @@ inline vec3 operator/(const vec3& v, double k)
 	}
 }
 
-inline double dot(const vec3& v1, const vec3& v2)
+inline float dot(const vec3& v1, const vec3& v2)
 {
 	vec3 mult = v1 * v2;
 	return(mult.v.x + mult.v.y + mult.v.z);
@@ -160,7 +168,7 @@ inline vec3 cross(const vec3& v1, const vec3& v2)
 	return vec3
 	(
 		v1.v.y * v2.v.z - v1.v.z * v2.v.y,
-		(v1.v.x * v2.v.z - v1.v.z * v2.v.x) * -1,
+		v1.v.z * v2.v.x - v1.v.x * v2.v.z,
 		v1.v.x * v2.v.y - v1.v.y * v2.v.x
 	);
 }
